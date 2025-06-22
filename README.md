@@ -27,22 +27,30 @@
 
   **Параметри тіла запиту (JSON):**
 
-  - `autoId` (обов'язково, integer): Ідентифікатор лістингу.
+  - `autoId` (обов'язково, string): Ідентифікатор лістингу.
   - `type` (обов'язково, string): Тип події. Можливі значення: `"page_view"` або `"phone_view"`.
+  - `fingerprint` (обов'язково, string): Ідентифікатор користувача. Значення має починатись з fingerprint-auto
 
   **Приклад тіла запиту:**
 
   ```json
   {
     "autoId": 123,
-    "type": "page_view"
+    "type": "page_view",
+    "fingerprint": "fingerprint-auto-502385c710c9578e8527e589d03e4e7a"
   }
   ```
 
   **Відповідь:**
 
   - `201 Created` у разі успіху.
+  ```json
+  {
+    message: "Event type: phone_view for hyundai-ioniq-5 has been recorded successfully"
+  }
+  ```
   - `400 Bad Request` у разі невалідних даних.
+  - `500 Internal Server Error` у разі якоїсь біди з бд
 
 ## Попередні вимоги для запуску
 
