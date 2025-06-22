@@ -46,7 +46,7 @@
   - `201 Created` у разі успіху.
   ```json
   {
-    message: 'Event type: phone_view for hyundai-ioniq-5 has been recorded successfully'
+    "message": "Event type: phone_view for hyundai-ioniq-5 has been recorded successfully"
   }
   ```
   - `400 Bad Request` у разі невалідних даних.
