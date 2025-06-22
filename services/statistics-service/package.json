@@ -1,0 +1,33 @@
+{
+  "name": "statistics-service",
+  "version": "1.0.0",
+  "description": "A microservice for collecting and retrieving listing statistics.",
+  "main": "dist/server.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/src/server.js",
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "db:migrate": "ts-node db/migrations/init-db.ts",
+    "db:migrate:prod": "node dist/db/migrations/init-db.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "ioredis": "^5.3.2",
+    "koa": "^2.15.3",
+    "koa-bodyparser": "^4.4.1",
+    "koa-router": "^12.0.1",
+    "pg": "^8.11.5"
+  },
+  "devDependencies": {
+    "@types/koa": "^2.15.0",
+    "@types/koa-bodyparser": "^4.3.12",
+    "@types/koa-router": "^7.4.8",
+    "@types/node": "^20.19.1",
+    "@types/pg": "^8.11.6",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.5"
+  },
+  "author": "",
+  "license": "ISC"
+}

@@ -1,0 +1,48 @@
+services:
+  statistics-db:
+    image: postgres:13-alpine
+    container_name: statistics-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: statistics
+    volumes:
+      - statistics-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    container_name: statistics-redis
+    ports:
+      - "6379:6379"
+
+  statistics-service:
+    build: ./services/statistics-service
+    container_name: statistics-service
+    depends_on:
+      - statistics-db
+      - redis
+    environment:
+      DB_HOST: statistics-db
+      DB_PORT: 5432
+      DB_USER: user
+      DB_PASSWORD: password
+      DB_NAME: statistics
+      PORT: 3001
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  frontend:
+    build: ./frontend
+    container_name: frontend
+
+  gateway:
+    build: ./gateway
+    container_name: gateway
+    ports:
+      - "3000:80"
+    depends_on:
+      - statistics-service
+      - frontend
+
+volumes:
+  statistics-data: 
