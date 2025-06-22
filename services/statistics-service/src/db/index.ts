@@ -1,14 +1,15 @@
 import { Pool, QueryResult, QueryResultRow } from 'pg';
 import Redis from 'ioredis';
+import { config } from '../config/environment';
 
 const pool = new Pool({
-    connectionString: `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    connectionString: config.databaseUrl
 });
 
 const redis = new Redis({
-    host: process.env.REDIS_HOST || 'localhost',
-    port: parseInt(process.env.REDIS_PORT || '6379', 10),
-    password: process.env.REDIS_PASSWORD || undefined,
+    host: config.redisHost,
+    port: config.redisPort,
+    password: config.redisPassword,
 });
 
 export default {

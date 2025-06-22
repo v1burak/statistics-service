@@ -8,6 +8,9 @@ export interface IConfig {
     dbPort: number | string;
     dbName: string;
     databaseUrl: string;
+    redisHost: string;
+    redisPort: number;
+    redisPassword: string | undefined;
 }
 
 const config: IConfig = {
@@ -15,9 +18,12 @@ const config: IConfig = {
     dbUser: process.env.DB_USER,
     dbPassword: process.env.DB_PASSWORD,
     dbHost: process.env.DB_HOST || 'localhost',
-    dbPort: process.env.DB_PORT || 5432,
+    dbPort: Number(process.env.DB_PORT) || 5432,
     dbName: process.env.DB_NAME || 'apidb',
-    databaseUrl: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+    databaseUrl: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST || 'localhost'}:${process.env.DB_PORT || 5432}/${process.env.DB_NAME || 'apidb'}`,
+    redisHost: process.env.REDIS_HOST || 'localhost',
+    redisPort: Number(process.env.REDIS_PORT || '6379'),
+    redisPassword: process.env.REDIS_PASSWORD || undefined,
 };
 
 export { config };
