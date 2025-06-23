@@ -12,8 +12,9 @@ const redis = new Redis({
     password: config.redisPassword,
 });
 
-export default {
-    query: <T extends QueryResultRow>(text: string, params?: any[]): Promise<QueryResult<T>> => pool.query<T>(text, params),
+const db = {
+    query: <T extends QueryResultRow>(text: string, params?: any[]): Promise<QueryResult<T>> =>
+        pool.query<T>(text, params),
 };
 
-export { redis };
+export { db, redis };

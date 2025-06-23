@@ -1,9 +1,66 @@
 # Деталі взаємодії з проектом
 
-- **Frontend**: [http://localhost:3000](http://localhost:3000)
-- **API сервіс статистики**: `http://localhost:3000/api/statistics`
+  - **Frontend**: [http://localhost:3000](http://localhost:3000)
+  - **API сервіс статистики**: `http://localhost:3000/api/statistics`
+
+  ## Попередні вимоги для запуску
+
+  - [Docker](https://www.docker.com/get-started/)
+  - [Docker Compose](https://docs.docker.com/compose/install/)
+
+  ## Запуск проєкту
+
+  Проєкт можна запустити у двох режимах: **продакшн** та **дев**.
+
+  ---
+
+  ### 1. Prod mode:
+
+  Запуск у root папці проекту:
+
+  #### _Запуск прод моду:_
+
+  `make prod-up`
+
+  або
+
+  `docker compose -f docker-compose.prod.yml up --build -d`
+
+  #### _Зупинка прод моду:_
+
+  `make prod-down`
+
+  або
+
+  `docker compose -f docker-compose.prod.yml down`
+
+  ### 2. Dev mode:
+
+  Для роботи цього режиму необхідно надати Docker дозвіл на доступ до папки з проєктом.
+  Щоб це зробити треба відкрити `Docker Desktop > Settings > Resources > File Sharing` і додати туди папку з проектом
+
+  #### _Запуск дев моду:_
+
+  Запуск у root папці проекту:
+
+  `make dev-up`
+
+  або
+
+  `docker compose -f docker-compose.dev.yml up --build -d`
+
+  #### _Зупинка дев моду:_
+
+  `make dev-down`
+
+  або
+
+  `docker compose -f docker-compose.dev.yml down`
 
   ## `GET /api/statistics/:autoId`
+
+  **URL:**
+  - [http://localhost:3000/api/statistics/autoId](http://localhost:3000/api/statistics/autoId)
 
   Отримує агреговану статистику для конкретного ID.
 
@@ -22,6 +79,9 @@
   ```
 
   ## `POST /api/statistics`
+
+  **URL:**
+  - [http://localhost:3000/api/statistics](http://localhost:3000/api/statistics)
 
   Трекає нову подію (відкриття лістингу або номеру телефону).
 
@@ -43,7 +103,7 @@
 
   **Відповідь:**
 
-  - `201 Created` у разі успіху.
+  - `202 Accepted` у разі успіху.
   ```json
   {
     "message": "Event type: phone_view for hyundai-ioniq-5 has been recorded successfully"
@@ -52,56 +112,45 @@
   - `400 Bad Request` у разі невалідних даних.
   - `500 Internal Server Error` у разі якоїсь біди з бд
 
-## Попередні вимоги для запуску
+  ## `GET /api/statistics`
 
-- [Docker](https://www.docker.com/get-started/)
-- [Docker Compose](https://docs.docker.com/compose/install/)
+  **URL:**
+  - [http://localhost:3000/api/statistics?order=desc&limit=5&start=0&sort=page_views](http://localhost:3000/api/statistics?order=desc&limit=5&start=0&sort=page_views)
 
-## Запуск проєкту
+  **URL Параметри:**
 
-Проєкт можна запустити у двох режимах: **продакшн** та **дев**.
+  - `sort` (string): Тип події. Можливі значення: `"page_view"` або `"phone_view"`.
+  - `order` (string): Порядок сортування. Можливі значення: `"asc"` або `"desc"`.
+  - `start` (integer): Початок пошуку. Значення: 0, 10, etc
+  - `limit` (integer): Розмір масива. Значення: 1, 10, etc
 
----
+  **Відповідь:**
 
-### 1. Prod mode:
+  - `202 Accepted` у разі успіху.
+  ```json
+    [
+      {
+          "autoid": "hyundai-ioniq-5",
+          "page_views": 8,
+          "phone_views": 6
+      },
+      {
+          "autoid": "range-rover-velar",
+          "page_views": 1,
+          "phone_views": 1
+      },
+      {
+          "autoid": "bmw-x2",
+          "page_views": 1,
+          "phone_views": 1
+      },
+      {
+          "autoid": "mercedes-class-a",
+          "page_views": 1,
+          "phone_views": 1
+      }
+  ]
+  ```
+  - `400 Bad Request` у разі невалідних даних.
+  - `500 Internal Server Error` у разі якоїсь біди з бд
 
-Запуск у root папці проекту:
-
-#### _Запуск прод моду:_
-
-`make prod-up`
-
-або
-
-`docker compose -f docker-compose.prod.yml up --build -d`
-
-#### _Зупинка прод моду:_
-
-`make prod-down`
-
-або
-
-`docker compose -f docker-compose.prod.yml down`
-
-### 2. Dev mode:
-
-Для роботи цього режиму необхідно надати Docker дозвіл на доступ до папки з проєктом.
-Щоб це зробити треба відкрити `Docker Desktop > Settings > Resources > File Sharing` і додати туди папку з проектом
-
-#### _Запуск дев моду:_
-
-Запуск у root папці проекту:
-
-`make dev-up`
-
-або
-
-`docker compose -f docker-compose.dev.yml up --build -d`
-
-#### _Зупинка дев моду:_
-
-`make dev-down`
-
-або
-
-`docker compose -f docker-compose.dev.yml down`

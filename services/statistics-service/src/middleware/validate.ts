@@ -1,26 +1,34 @@
-import { Context, Next } from 'koa';
-import eventSchema from '../validation/eventSchema';
+import { Context, Next } from "koa";
 
-type Schema = typeof eventSchema;
-
-const validate = (schema: Schema) => (ctx: Context, next: Next): Promise<void> | void => {
-    const { body } = ctx.request as any;
-
+const validate =
+  (
+    schema: Record<string, (value: any) => boolean>,
+    source: "body" | "query" | "params" = "body"
+  ) =>
+  (ctx: Context, next: Next): Promise<void> | void => {
+    let data;
+    if (source === "query") {
+      data = ctx.query;
+    } else if (source === "params") {
+      data = ctx.params;
+    } else {
+      data = (ctx.request as any)[source];
+    }
     const error: string[] = [];
 
-    (Object.keys(schema) as (keyof Schema)[]).forEach((key) => {
-        if (!body.hasOwnProperty(key) || !schema[key](body[key])) {
-            error.push(`Invalid or missing property: ${key}`);
-        }
+    Object.keys(schema).forEach((key) => {
+      if (!schema[key](data[key])) {
+        error.push(`Invalid or missing property: ${key}`);
+      }
     });
 
     if (error.length > 0) {
-        ctx.status = 400;
-        ctx.body = { error };
-        return;
+      ctx.status = 400;
+      ctx.body = { error };
+      return;
     }
 
     return next();
-};
+  };
 
 export default validate;
